@@ -30,6 +30,7 @@ replay_pid*
 !src/main/resources/application-example.yml  #
 
 # --- Gradle Build ---
+build.gradle
 .gradle/
 .gradle-cache/
 .gradle-test-kit/
@@ -44,3 +45,7 @@ out/
 # --- OS Files ---
 .DS_Store
 Thumbs.db
+build.gradle
+build.gradle
+*.gradle
+*.gradle
