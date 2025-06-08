@@ -1,16 +1,16 @@
-# Compiled class file
+# --- Java Class Files ---
 *.class
 
-# Log file
+# --- Log Files ---
 *.log
 
-# BlueJ files
+# --- BlueJ ---
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
+# --- J2ME ---
 .mtj.tmp/
 
-# Package Files #
+# --- Package Files ---
 *.jar
 *.war
 *.nar
@@ -19,6 +19,28 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# --- JVM Crash Logs ---
 hs_err_pid*
 replay_pid*
+
+# --- Spring Boot / 민감한 설정 파일 ---
+*.properties
+*.yml
+*.yaml
+!src/main/resources/application-example.yml  #
+
+# --- Gradle Build ---
+.gradle/
+.gradle-cache/
+.gradle-test-kit/
+build/
+!gradle/wrapper/gradle-wrapper.jar  #
+
+# --- IDEs ---
+.idea/
+*.iml
+out/
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
