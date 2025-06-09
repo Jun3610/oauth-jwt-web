@@ -38,7 +38,6 @@ public class AuthService {
 
     // FindById for AccessToken
     public void getUserInfo (AccessTokenResponseDto AccessToken) {
-        authRepository.
     }
 
 }
