@@ -12,9 +12,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table (name = "followed")
-public class followed {
+public class Followed {
 
-    public followed() {}
+    public Followed() {}
 
     @Id
     private boolean followed;
@@ -28,7 +28,7 @@ public class followed {
     @Column (nullable = false)
     private UUID concert_id;
 
-    public followed(boolean followed, UUID user_id, UUID artist_id, UUID concert_id) {
+    public Followed(boolean followed, UUID user_id, UUID artist_id, UUID concert_id) {
         this.followed = followed;
         this.user_id = user_id;
         this.artist_id = artist_id;

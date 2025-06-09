@@ -11,9 +11,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "venue")
-public class venue {
+public class Venue {
 
-    public venue() {}
+    public Venue() {}
 
     @Id
     private UUID venue_id;
@@ -25,7 +25,7 @@ public class venue {
 
     private boolean parking;
 
-    public venue(UUID venue_id, UUID concert_id, String location, boolean parking) {
+    public Venue(UUID venue_id, UUID concert_id, String location, boolean parking) {
         this.venue_id = UUID.randomUUID();
         this.concert_id = concert_id;
         this.location = location;

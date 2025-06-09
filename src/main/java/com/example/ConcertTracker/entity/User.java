@@ -12,9 +12,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table (name = "user")
-public class user {
+public class User {
 
-    public user() {}
+    public User() {}
 
     @Id
     private UUID user_id;
@@ -32,7 +32,7 @@ public class user {
 
     private LocalDateTime created_at;
 
-    public user(UUID user_id, String provider_user_id, String email, String user_name, String provider) {
+    public User(UUID user_id, String provider_user_id, String email, String user_name, String provider) {
         this.user_id = UUID.randomUUID();
         this.provider_user_id = provider_user_id;
         this.email = email;

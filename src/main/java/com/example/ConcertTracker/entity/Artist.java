@@ -8,9 +8,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "artist")
-public class artist {
+public class Artist {
 
-    public artist() {}
+    public Artist() {}
 
     @Id
     private UUID artist_id;
@@ -22,7 +22,7 @@ public class artist {
 
     private String artist_photo;
 
-    public artist(String created_by_user_id, String artist_name, String artist_photo) {
+    public Artist(String created_by_user_id, String artist_name, String artist_photo) {
         this.artist_id = UUID.randomUUID();
         this.created_by_user_id = created_by_user_id;
         this.artist_name = artist_name;

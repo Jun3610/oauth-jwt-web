@@ -11,9 +11,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "notification")
-public class notification {
+public class Notification {
 
-    public notification() {}
+    public Notification() {}
 
     @Id
     private UUID notification_id;
@@ -24,7 +24,7 @@ public class notification {
     @Column(nullable = false)
     private UUID artist_id;
 
-    public notification(UUID notification_id, UUID user_id, UUID artist_id) {
+    public Notification(UUID notification_id, UUID user_id, UUID artist_id) {
         this.notification_id = UUID.randomUUID();
         this.user_id = user_id;
         this.artist_id = artist_id;

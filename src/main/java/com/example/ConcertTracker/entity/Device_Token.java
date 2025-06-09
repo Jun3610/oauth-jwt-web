@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "device_token")
-public class device_token {
+public class Device_Token {
 
-    public device_token() {}
+    public Device_Token() {}
 
     @Id
     private String device_token;
@@ -19,7 +19,7 @@ public class device_token {
     @Column(nullable = false)
     private String token;
 
-    public device_token(String device_id, String token) {
+    public Device_Token(String device_id, String token) {
         this.device_token = device_id;
         this.token = token;
     }
