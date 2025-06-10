@@ -22,8 +22,6 @@ public class User {
     @Column(nullable = false)
     private String oAuthId;
 
-    private String provider_user_id;
-
     private String email;
 
     private String user_name;
@@ -32,9 +30,9 @@ public class User {
 
     private LocalDateTime created_at;
 
-    public User(UUID user_id, String provider_user_id, String email, String user_name, String provider) {
+    public User(String oAuthId, String email, String user_name, String provider) {
         this.user_id = UUID.randomUUID();
-        this.provider_user_id = provider_user_id;
+        this.oAuthId = oAuthId;
         this.email = email;
         this.user_name = user_name;
         this.provider = provider;
