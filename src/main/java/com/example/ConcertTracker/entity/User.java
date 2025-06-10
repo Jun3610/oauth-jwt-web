@@ -20,7 +20,7 @@ public class User {
     private UUID user_id;
 
     @Column(nullable = false)
-    private String OAuth_id;
+    private String oAuthId;
 
     private String provider_user_id;
 
