@@ -7,17 +7,17 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
 
-@Configuration // Spring Bean
+@Service
 public class JwtService {
 
     private Key key;
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret.key}")
     private String secret;
 
     @Value("${jwt.accessTokenExpirationMs}")
@@ -56,4 +56,7 @@ public class JwtService {
         return builder.compact();
     }
 
+    // TokenExpirationMs -> FrontEnd
+    public Long getAccessTokenExpirationMs() {return accessTokenExpirationMs;}
+    public Long getRefreshTokenExpirationMs() {return refreshTokenExpirationMs;}
 }
