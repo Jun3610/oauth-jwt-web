@@ -14,12 +14,13 @@ import java.util.Optional;
 public class AuthController {
     private kakaoAuthService kakaoAuthService;
 
+
+    // Auth -> Token, Not exist -> register -> Token
     @PostMapping("/login/kakao")
     public TokenResponseDto authorize(@RequestHeader String authorization_code) { // Get Authorization
         AccessTokenResponseDto AccessToken = kakaoAuthService.kakaoAuthorize(authorization_code); // send Authorization to service
         ResponseEntity<UserInfoRequestDto> userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);
-        kakaoAuthService.authWithToken(user);
-        return ;
+        return kakaoAuthService.authWithToken(user);
     }
 }
