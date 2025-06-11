@@ -58,5 +58,4 @@ public class JwtService {
 
     // TokenExpirationMs -> FrontEnd
     public Long getAccessTokenExpirationMs() {return accessTokenExpirationMs;}
-    public Long getRefreshTokenExpirationMs() {return refreshTokenExpirationMs;}
 }
