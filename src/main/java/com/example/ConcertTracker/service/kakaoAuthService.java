@@ -1,0 +1,104 @@
+package com.example.ConcertTracker.service;
+
+import com.example.ConcertTracker.dto.TokenResponseDto;
+import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto;
+import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
+import com.example.ConcertTracker.entity.User;
+import com.example.ConcertTracker.repository.kakaoAuthRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class kakaoAuthService {
+    private RestTemplate restTemplate;
+    private kakaoAuthRepository kakaoAuthRepository;
+    private JwtService jwtService;
+    private TokenResponseDto tokenDto;
+    private LocalDateTime now = LocalDateTime.now();
+
+    @Value("${kakao.client-id}")
+    private String kakaoClientId;
+
+    //config
+    kakaoAuthService(RestTemplate restTemplate) { //spring made it
+        this.restTemplate = restTemplate;
+    }
+
+    // Authorization -> AccessToken
+    public AccessTokenResponseDto kakaoAuthorize(String code) {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.add("grant_type", "authorization_code");
+        multiValueMap.add("client_id", kakaoClientId);
+        multiValueMap.add("redirect_uri", "http://localhost:8080/api/login/kakao");
+        multiValueMap.add("code", code);
+        AccessTokenResponseDto AccessToken = restTemplate.postForObject( //RestTemplate's default method: get, and
+                "https://kauth.kakao.com/oauth/token", // URL
+                multiValueMap, // FormData to send
+                AccessTokenResponseDto.class // response type
+        );
+        return AccessToken;
+    }
+
+    // Get UserInfo with AccessToken from Kakao
+    public ResponseEntity<UserInfoRequestDto> kakaoGetUserInfo (AccessTokenResponseDto AccessTokenFromKakao) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization","Bearer " + AccessTokenFromKakao.getAccess_token());
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<UserInfoRequestDto> userInfo = restTemplate.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.GET,
+                httpEntity,
+                UserInfoRequestDto.class
+        );
+        return userInfo;
+    }
+
+    // FindByAuthId in DataBase
+    public Optional<User> findOrCreateUserFromOAuth(ResponseEntity<UserInfoRequestDto> userInfo) {
+        Optional<User> optionalUser = kakaoAuthRepository.findByoAuthId(userInfo.getBody().getId().toString())
+                .or( () -> { User newUser = new User(
+                        UUID.randomUUID(),
+                        userInfo.getBody().getId().toString(),
+                        userInfo.getBody().getKakaoAccount().getEmail(),
+                        userInfo.getBody().getKakaoAccount().getProfile().getNickname(),
+                        "kakao",
+                        now
+                );
+                    kakaoAuthRepository.save(newUser);
+                    return Optional.of(newUser);
+                });
+        return optionalUser;
+    }
+
+    // Returning JWT AccessToken, RefreshToken to Client
+    public TokenResponseDto authWithToken(Optional<User> user) {
+        String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
+        String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());
+        Long accessTokenExpirationMs = jwtService.getAccessTokenExpirationMs();
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(
+                AccessToken,
+                RefreshToken,
+                "Bearer",
+                accessTokenExpirationMs,
+                user.get().getUser_id(),
+                user.get().getUser_name()
+        );
+        return tokenResponseDto;
+    }
+}
+
+
+
+
+
