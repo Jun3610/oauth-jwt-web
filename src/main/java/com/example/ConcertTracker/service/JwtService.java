@@ -61,7 +61,7 @@ public class JwtService {
 
 
     public boolean isTokenValid(String token) {
-        // 만료 체크만 하고, 유저 정보는 직접 DB 조회할 때 확인
+
         return !isTokenExpired(token);
     }
 

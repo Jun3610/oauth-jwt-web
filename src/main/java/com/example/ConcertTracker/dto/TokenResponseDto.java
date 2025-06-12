@@ -27,5 +27,4 @@ public class TokenResponseDto {
         this.userId = userId;
         this.username = username;
     }
-
 }

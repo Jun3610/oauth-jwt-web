@@ -6,7 +6,6 @@ import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.ConcertTracker.entity.User;
 import com.example.ConcertTracker.service.kakaoAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
