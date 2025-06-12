@@ -9,7 +9,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface kakaoAuthRepository extends JpaRepository<User, UUID> {
+public interface kakaoAuthRepository extends JpaRepository<User, String> {
 
     Optional<User> findByOauthId(String OAuth_id);
 }

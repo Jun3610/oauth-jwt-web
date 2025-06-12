@@ -19,8 +19,8 @@ public class User {
     public User() {}
 
     @Id
-    @Column(name = "user_id ", unique = true, nullable = false)
-    private UUID user_id;
+    @Column(name = "user_id", unique = true, nullable = false)
+    private String user_id;
 
     @Column(name = "OAuth_id")
     private String oauthId;
@@ -40,16 +40,14 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    public User(UUID user_id,
+    public User(String user_id,
                 String oauthId,
-                String email,
                 String user_name,
                 String profile_image,
                 String provider,
                 LocalDateTime created_at) {
                 this.user_id = user_id;
                 this.oauthId = oauthId;
-                this.email = email;
                 this.user_name = user_name;
                 this.profile_image = profile_image;
                 this.provider = provider;

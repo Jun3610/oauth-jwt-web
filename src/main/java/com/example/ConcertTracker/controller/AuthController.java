@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/login/kakao")
     public TokenResponseDto authorize(@RequestParam String code) { // Get Authorization
         AccessTokenResponseDto AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
-        ResponseEntity<UserInfoRequestDto> userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
+        UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);
         return kakaoAuthService.authWithToken(user);
     }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -32,11 +31,11 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(UUID user_id) {
+    public String generateAccessToken(String user_id) {
         JwtBuilder builder = Jwts.builder(); // JWT Method Setting
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
-        builder.setSubject(user_id.toString()) // Set information to AccessToken
+        builder.setSubject(user_id) // Set information to AccessToken
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512) // if 'Header' or 'payLoad' was changed -> Sign x
                 .setExpiration(expiryDate); //expire time
@@ -44,15 +43,14 @@ public class JwtService {
         return builder.compact();
     }
 
-    public String generateRefreshToken(UUID user_id) {
+    public String generateRefreshToken(String user_id) {
         JwtBuilder builder = Jwts.builder();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
-        builder.setSubject(user_id.toString())
+        builder.setSubject(user_id)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate) //expire time, difference from AccessToken
                 .signWith(key, SignatureAlgorithm.HS512);
-
         return builder.compact();
     }
 

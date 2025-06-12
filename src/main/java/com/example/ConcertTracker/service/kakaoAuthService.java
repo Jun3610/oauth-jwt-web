@@ -5,6 +5,7 @@ import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto;
 import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.ConcertTracker.entity.User;
 import com.example.ConcertTracker.repository.kakaoAuthRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Service
 public class kakaoAuthService {
@@ -43,6 +45,7 @@ public class kakaoAuthService {
     private String kakaoClientId;
 
     // AuthorizationCode -> AccessToken
+    @Transactional
     public AccessTokenResponseDto kakaoAuthorize(String code) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("grant_type", "authorization_code");
@@ -58,7 +61,8 @@ public class kakaoAuthService {
     }
 
     // Get UserInfo with AccessToken from Kakao
-    public ResponseEntity<UserInfoRequestDto> kakaoGetUserInfo (AccessTokenResponseDto AccessTokenFromKakao) {
+    @Transactional
+    public UserInfoRequestDto kakaoGetUserInfo (AccessTokenResponseDto AccessTokenFromKakao) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer " + AccessTokenFromKakao.getAccess_token());
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
@@ -68,18 +72,18 @@ public class kakaoAuthService {
                 httpEntity,
                 UserInfoRequestDto.class
         );
-        return userInfo;
+        return userInfo.getBody();
     }
 
     // FindByAuthId in DataBase Or Set UserInfo to DataBase-> UserInfo
-    public Optional<User> findOrCreateUserFromOAuth(ResponseEntity<UserInfoRequestDto> userInfo) {
-        Optional<User> optionalUser = kakaoAuthRepository.findByOauthId(userInfo.getBody().getId().toString())
+    @Transactional
+    public Optional<User> findOrCreateUserFromOAuth(UserInfoRequestDto userInfo) {
+        Optional<User> optionalUser = kakaoAuthRepository.findByOauthId(userInfo.getId().toString())
                 .or( () -> { User newUser = new User(
-                        UUID.randomUUID(),
-                        userInfo.getBody().getId().toString(),
-                        userInfo.getBody().getKakaoAccount().getEmail(),
-                        userInfo.getBody().getKakaoAccount().getProfile().getNickname(),
-                        userInfo.getBody().getKakaoAccount().getProfile().getProfile_image_url(),
+                        UUID.randomUUID().toString(),
+                        userInfo.getId().toString(),
+                        userInfo.getKakaoAccount().getProfile().getNickname(),
+                        userInfo.getKakaoAccount().getProfile().getProfile_image_url(),
                         "kakao",
                         now
                 );
@@ -90,6 +94,7 @@ public class kakaoAuthService {
     }
 
     // Returning JWT AccessToken, RefreshToken to Client
+    @Transactional
     public TokenResponseDto authWithToken(Optional<User> user) {
         String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
         String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());

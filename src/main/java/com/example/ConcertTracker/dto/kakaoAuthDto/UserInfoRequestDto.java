@@ -1,9 +1,13 @@
 package com.example.ConcertTracker.dto.kakaoAuthDto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
+
 public class UserInfoRequestDto {
-    private Long Id;
+    private Long id;
+
+    @JsonProperty("kakao_account")
     private Account KakaoAccount;
 }
