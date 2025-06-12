@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.util.UUID;
 
-
 @Data
 @Entity
 @Table(name = "artist")

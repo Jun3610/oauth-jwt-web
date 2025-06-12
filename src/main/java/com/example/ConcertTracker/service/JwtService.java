@@ -57,7 +57,7 @@ public class JwtService {
     // TokenExpirationMs -> FrontEnd
     public Long getAccessTokenExpirationMs() {return accessTokenExpirationMs;}
 
-    /// ////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public boolean isTokenValid(String token) {
@@ -77,6 +77,7 @@ public class JwtService {
                 .getBody()
                 .getExpiration();
     }
+
     public String extractUserId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
