@@ -34,7 +34,7 @@ public class JwtService {
 
     public String generateAccessToken(UUID user_id) {
         JwtBuilder builder = Jwts.builder(); // JWT Method Setting
-        Date now =  new Date();
+        Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
         builder.setSubject(user_id.toString()) // Set information to AccessToken
                 .setIssuedAt(now)
@@ -46,7 +46,7 @@ public class JwtService {
 
     public String generateRefreshToken(UUID user_id) {
         JwtBuilder builder = Jwts.builder();
-        Date now =  new Date();
+        Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
         builder.setSubject(user_id.toString())
                 .setIssuedAt(now)
@@ -58,4 +58,34 @@ public class JwtService {
 
     // TokenExpirationMs -> FrontEnd
     public Long getAccessTokenExpirationMs() {return accessTokenExpirationMs;}
+
+    /// ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public boolean isTokenValid(String token) {
+        // 만료 체크만 하고, 유저 정보는 직접 DB 조회할 때 확인
+        return !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+    }
+    public String extractUserId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
+

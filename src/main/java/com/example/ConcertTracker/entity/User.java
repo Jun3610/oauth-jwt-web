@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,26 +16,43 @@ import java.util.UUID;
 @Table (name = "user")
 public class User {
 
+    public User() {}
+
     @Id
+    @Column(name = "user_id ", unique = true, nullable = false)
     private UUID user_id;
 
-    @Column(nullable = false)
-    private String oAuthId;
+    @Column(name = "OAuth_id")
+    private String oauthId;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "username")
     private String user_name;
 
+    @Column(name = "profile_image")
+    private String profile_image;
+
+    @Column(name = "provider")
     private String provider;
 
+    @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    public User(UUID user_id, String oAuthId, String email, String user_name, String provider, LocalDateTime created_at) {
-        this.user_id = user_id;
-        this.oAuthId = oAuthId;
-        this.email = email;
-        this.user_name = user_name;
-        this.provider = provider;
-        this.created_at = created_at;
+    public User(UUID user_id,
+                String oauthId,
+                String email,
+                String user_name,
+                String profile_image,
+                String provider,
+                LocalDateTime created_at) {
+                this.user_id = user_id;
+                this.oauthId = oauthId;
+                this.email = email;
+                this.user_name = user_name;
+                this.profile_image = profile_image;
+                this.provider = provider;
+                this.created_at = created_at;
     }
 }

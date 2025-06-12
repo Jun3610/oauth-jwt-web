@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface kakaoAuthRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByoAuthId(String oAuthId);
+    Optional<User> findByOauthId(String OAuth_id);
 }

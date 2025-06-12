@@ -21,21 +21,28 @@ import java.util.UUID;
 
 @Service
 public class kakaoAuthService {
-    private RestTemplate restTemplate;
-    private kakaoAuthRepository kakaoAuthRepository;
-    private JwtService jwtService;
+    final private RestTemplate restTemplate;
+    final private kakaoAuthRepository kakaoAuthRepository;
+    final private JwtService jwtService;
+
+    //config made by Spring
+    kakaoAuthService(
+            RestTemplate restTemplate,
+            kakaoAuthRepository kakaoAuthRepository,
+            JwtService jwtService
+                     ) {
+        this.restTemplate = restTemplate;
+        this.kakaoAuthRepository = kakaoAuthRepository;
+        this.jwtService = jwtService;
+    }
+
     private TokenResponseDto tokenDto;
     private LocalDateTime now = LocalDateTime.now();
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
 
-    //config
-    kakaoAuthService(RestTemplate restTemplate) { //spring made it
-        this.restTemplate = restTemplate;
-    }
-
-    // Authorization -> AccessToken
+    // AuthorizationCode -> AccessToken
     public AccessTokenResponseDto kakaoAuthorize(String code) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("grant_type", "authorization_code");
@@ -64,14 +71,15 @@ public class kakaoAuthService {
         return userInfo;
     }
 
-    // FindByAuthId in DataBase
+    // FindByAuthId in DataBase Or Set UserInfo to DataBase-> UserInfo
     public Optional<User> findOrCreateUserFromOAuth(ResponseEntity<UserInfoRequestDto> userInfo) {
-        Optional<User> optionalUser = kakaoAuthRepository.findByoAuthId(userInfo.getBody().getId().toString())
+        Optional<User> optionalUser = kakaoAuthRepository.findByOauthId(userInfo.getBody().getId().toString())
                 .or( () -> { User newUser = new User(
                         UUID.randomUUID(),
                         userInfo.getBody().getId().toString(),
                         userInfo.getBody().getKakaoAccount().getEmail(),
                         userInfo.getBody().getKakaoAccount().getProfile().getNickname(),
+                        userInfo.getBody().getKakaoAccount().getProfile().getProfile_image_url(),
                         "kakao",
                         now
                 );
@@ -97,8 +105,3 @@ public class kakaoAuthService {
         return tokenResponseDto;
     }
 }
-
-
-
-
-
