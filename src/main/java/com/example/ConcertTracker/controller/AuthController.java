@@ -1,7 +1,6 @@
 package com.example.ConcertTracker.controller;
 
-import com.example.ConcertTracker.dto.TokenResponseDto;
-import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto;
+import com.example.ConcertTracker.dto.AccessTokenResponseDto;
 import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.ConcertTracker.entity.User;
 import com.example.ConcertTracker.service.kakaoAuthService;
@@ -19,8 +18,8 @@ public class AuthController {
 
     // Code -> Token
     @PostMapping("/login/kakao")
-    public TokenResponseDto authorize(@RequestParam String code) { // Get Authorization
-        AccessTokenResponseDto AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
+    public AccessTokenResponseDto authorize(@RequestParam String code) { // Get Authorization
+        com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);
         return kakaoAuthService.authWithToken(user);

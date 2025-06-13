@@ -1,7 +1,6 @@
 package com.example.ConcertTracker.service;
 
-import com.example.ConcertTracker.dto.TokenResponseDto;
-import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto;
+import com.example.ConcertTracker.dto.AccessTokenResponseDto;
 import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.ConcertTracker.entity.User;
 import com.example.ConcertTracker.repository.kakaoAuthRepository;
@@ -38,7 +37,7 @@ public class kakaoAuthService {
         this.jwtService = jwtService;
     }
 
-    private TokenResponseDto tokenDto;
+    private AccessTokenResponseDto tokenDto;
     private LocalDateTime now = LocalDateTime.now();
 
     @Value("${kakao.client-id}")
@@ -46,23 +45,23 @@ public class kakaoAuthService {
 
     // AuthorizationCode -> AccessToken
     @Transactional
-    public AccessTokenResponseDto kakaoAuthorize(String code) {
+    public com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto kakaoAuthorize(String code) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("grant_type", "authorization_code");
         multiValueMap.add("client_id", kakaoClientId);
         multiValueMap.add("redirect_uri", "http://localhost:8080/api/login/kakao");
         multiValueMap.add("code", code);
-        AccessTokenResponseDto AccessToken = restTemplate.postForObject( //RestTemplate's default method: get, and
+        com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto AccessToken = restTemplate.postForObject( //RestTemplate's default method: get, and
                 "https://kauth.kakao.com/oauth/token", // URL
                 multiValueMap, // FormData to send
-                AccessTokenResponseDto.class // response type
+                com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto.class // response type
         );
         return AccessToken;
     }
 
     // Get UserInfo with AccessToken from Kakao
     @Transactional
-    public UserInfoRequestDto kakaoGetUserInfo (AccessTokenResponseDto AccessTokenFromKakao) {
+    public UserInfoRequestDto kakaoGetUserInfo (com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDto AccessTokenFromKakao) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer " + AccessTokenFromKakao.getAccess_token());
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
@@ -95,11 +94,11 @@ public class kakaoAuthService {
 
     // Returning JWT AccessToken, RefreshToken to Client
     @Transactional
-    public TokenResponseDto authWithToken(Optional<User> user) {
+    public AccessTokenResponseDto authWithToken(Optional<User> user) {
         String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
         String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());
         Long accessTokenExpirationMs = jwtService.getAccessTokenExpirationMs();
-        TokenResponseDto tokenResponseDto = new TokenResponseDto(
+        AccessTokenResponseDto tokenResponseDto = new AccessTokenResponseDto(
                 AccessToken,
                 RefreshToken,
                 "Bearer",

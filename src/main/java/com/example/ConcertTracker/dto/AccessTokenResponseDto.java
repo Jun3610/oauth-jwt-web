@@ -3,7 +3,7 @@ package com.example.ConcertTracker.dto;
 import lombok.Data;
 
 @Data
-public class TokenResponseDto {
+public class AccessTokenResponseDto {
 
     private String accessToken;
     private String refreshToken;
@@ -12,7 +12,7 @@ public class TokenResponseDto {
     private String userId;
     private String username;
 
-    public TokenResponseDto(
+    public AccessTokenResponseDto(
         String accessToken,
         String refreshToken,
         String tokenType,
