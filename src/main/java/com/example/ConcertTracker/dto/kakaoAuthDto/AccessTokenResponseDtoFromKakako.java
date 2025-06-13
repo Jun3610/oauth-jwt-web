@@ -3,9 +3,9 @@ package com.example.ConcertTracker.dto.kakaoAuthDto;
 import lombok.Data;
 
 @Data
-public class AccessTokenResponseDto {
+public class AccessTokenResponseDtoFromKakako {
 
-    public AccessTokenResponseDto() {}
+    public AccessTokenResponseDtoFromKakako() {}
 
     private String token_type;
 
