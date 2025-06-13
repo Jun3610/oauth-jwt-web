@@ -21,13 +21,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class kakaoAuthService {
+public class KakaoAuthService {
     final private RestTemplate restTemplate;
     final private kakaoAuthRepository kakaoAuthRepository;
     final private JwtService jwtService;
 
     //config made by Spring
-    kakaoAuthService(
+    KakaoAuthService(
             RestTemplate restTemplate,
             kakaoAuthRepository kakaoAuthRepository,
             JwtService jwtService
@@ -43,7 +43,7 @@ public class kakaoAuthService {
     @Value("${kakao.client-id}")
     private String kakaoClientId;
 
-    @Value("${REDIRECT_URL}")
+    @Value("${kakao.redirect.url}")
     private String redirectUrl;
 
     // AuthorizationCode -> AccessToken

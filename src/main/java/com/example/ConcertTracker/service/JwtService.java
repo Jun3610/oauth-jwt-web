@@ -16,9 +16,6 @@ public class JwtService {
 
     private Key key;
 
-    @Value("${jwt.secret.key}")
-    private String secret;
-
     @Value("${jwt.accessTokenExpirationMs}")
     private Long accessTokenExpirationMs;
 
@@ -27,8 +24,7 @@ public class JwtService {
 
     @PostConstruct
     public void init() { // BASE64 -> byte[] -> Key
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     public String generateAccessToken(String user_id) {
