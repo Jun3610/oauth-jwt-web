@@ -13,11 +13,11 @@ import com.example.ConcertTracker.service.JwtService;
 import java.io.IOException;
 import java.util.List;
 
-public class securityFilterChain extends OncePerRequestFilter {
+public class SecurityFilterChain extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    public securityFilterChain(JwtService jwtService) {
+    public SecurityFilterChain(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 
