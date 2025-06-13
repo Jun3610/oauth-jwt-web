@@ -21,7 +21,7 @@ public class KakaoAuthController {
 
     // Code -> Token
     @PostMapping("/kakao")
-    public AccessTokenResponseDto authorize(@RequestParam String code) { // Get Authorization
+    public AccessTokenResponseDto authorizeKakao(@RequestParam String code) { // Get Authorization
         AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);
