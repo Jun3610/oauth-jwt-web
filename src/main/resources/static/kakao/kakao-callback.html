@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kakao OAuth 콜백</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<h1>Kakao 로그인 처리 중...</h1>
+
+<div id="result">
+    <p>로그인 정보를 불러오는 중입니다...</p>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (!code) {
+        alert("카카오 인증 실패: code 없음");
+        throw new Error("code 파라미터가 없습니다");
+    }
+
+    fetch(`http://localhost:8080/api/kakao/auth?code=${code}`, {
+        method: "POST",
+        credentials: "include"
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("서버 응답 오류");
+            }
+            return res.json();
+        })
+        .then(data => {
+            console.log("JWT 토큰 응답:", data);
+            const resultDiv = document.getElementById("result");
+
+            resultDiv.innerHTML = `
+                <h2>로그인 성공!</h2>
+                <p><strong>Access Token:</strong> ${data.accessToken}</p>
+                <p><strong>Refresh Token:</strong> ${data.refreshToken}</p>
+                <p><strong>Token Type:</strong> ${data.tokenType}</p>
+                <p><strong>Expires In:</strong> ${data.expiresIn} ms</p>
+                <p><strong>User ID:</strong> ${data.userId}</p>
+                <p><strong>Username:</strong> ${data.username}</p>
+            `;
+        })
+        .catch(err => {
+            console.error("토큰 요청 실패:", err);
+            alert("로그인 처리 중 오류 발생");
+            document.getElementById("result").innerHTML = "<p style='color:red'>로그인 처리 중 오류가 발생했습니다.</p>";
+        });
+</script>
+</body>
+</html>
