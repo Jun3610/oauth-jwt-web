@@ -1,11 +1,12 @@
 package com.example.oauthjwtweb.repository;
 
-import com.example.oauthjwtweb.dto.NaverAuthDto.UserInfoFromKakakoByTokenDto;
 import com.example.oauthjwtweb.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface NaverAuthRepository extends JpaRepository {
-    Optional <User> findByoauthId (String OAuth_id);
+@Repository
+public interface NaverAuthRepository extends JpaRepository<User, String> {
+    Optional <User> findByOauthId (String OAuth_id);
 }

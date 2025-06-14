@@ -3,7 +3,7 @@ package com.example.oauthjwtweb.dto.NaverAuthDto;
 import lombok.Data;
 
 @Data
-public class UserInfoFromKakakoByTokenDto {
+public class UserInfoFromNaverByTokenDto {
 
     private String resultcode;
 

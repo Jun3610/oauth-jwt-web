@@ -45,6 +45,7 @@ public class User {
                 String profile_image,
                 String provider,
                 LocalDateTime created_at) {
+
                 this.user_id = user_id;
                 this.oauthId = oauthId;
                 this.user_name = user_name;

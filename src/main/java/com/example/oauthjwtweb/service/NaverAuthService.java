@@ -2,7 +2,7 @@ package com.example.oauthjwtweb.service;
 
 import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
 import com.example.oauthjwtweb.dto.NaverAuthDto.AccessTokenResponseDtoFromNaver;
-import com.example.oauthjwtweb.dto.NaverAuthDto.UserInfoFromKakakoByTokenDto;
+import com.example.oauthjwtweb.dto.NaverAuthDto.UserInfoFromNaverByTokenDto;
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.NaverAuthRepository;
 import jakarta.servlet.http.HttpSession;
@@ -83,7 +83,6 @@ public class NaverAuthService {
         }
         try {
             MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-
             multiValueMap.add("grant_type", "authorization_code");
             multiValueMap.add("client_id", clientId);
             multiValueMap.add("client_secret", clientSecret);
@@ -124,29 +123,29 @@ public class NaverAuthService {
     }
 
     //AccessToken -> UserInfo
-    public UserInfoFromKakakoByTokenDto authByToken(AccessTokenResponseDtoFromNaver accessTokenResponseDtoFromNaver) {
+    public UserInfoFromNaverByTokenDto authByToken(AccessTokenResponseDtoFromNaver accessTokenResponseDtoFromNaver) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessTokenResponseDtoFromNaver.getAccessToken());
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<UserInfoFromKakakoByTokenDto> userInfoFromKakakoByTokenDtoResponseEntity = restTemplate.exchange(
+        ResponseEntity<UserInfoFromNaverByTokenDto> userInfoFromKakakoByTokenDtoResponseEntity = restTemplate.exchange(
                 "https://openapi.naver.com/v1/nid/me",
                 HttpMethod.GET,
                 httpEntity,
-                UserInfoFromKakakoByTokenDto.class
+                UserInfoFromNaverByTokenDto.class
         );
         return userInfoFromKakakoByTokenDtoResponseEntity.getBody();
     }
 
     // FindByAuthId in DataBase Or Set UserInfo to DataBase-> UserInfo
     @Transactional
-    public Optional<User> findOrCreateUserFromOAuth_naver(UserInfoFromKakakoByTokenDto userInfo) {
-        Optional<User> optionalUser = naverAuthRepository.findByoauthId(userInfo.getResponse().getId())
+    public Optional<User> findOrCreateUserFromOAuth_naver(UserInfoFromNaverByTokenDto userInfo) {
+        Optional<User> optionalUser = naverAuthRepository.findByOauthId(userInfo.getResponse().getId())
                 .or( () -> {
                     User newUser = new User(
                             UUID.randomUUID().toString(),
                             userInfo.getResponse().getId(),
-                            userInfo.getResponse().getEmail(),
+                            userInfo.getResponse().getNickname(),
                             userInfo.getResponse().getProfile_image(),
                             "NAVER",
                             now
@@ -157,4 +156,17 @@ public class NaverAuthService {
         return optionalUser;
     }
 
+    // Returning JWT AccessToken, RefreshToken to Client By UserId
+    public AccessTokenResponseDtoFromJWT authWithToken_naver(Optional<User> user) {
+        AccessTokenResponseDtoFromJWT accessTokenResponseDtoFromJWT =
+                new AccessTokenResponseDtoFromJWT(
+                jwtService.generateAccessToken(user.get().getUser_id()),
+                jwtService.generateRefreshToken(user.get().getUser_id()),
+                "Bearer",
+                jwtService.getAccessTokenExpirationMs(),
+                user.get().getUser_id(),
+                user.get().getUser_name()
+        );
+        return accessTokenResponseDtoFromJWT;
+    }
 }

@@ -2,12 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
-    <title>Naver OAuth 콜백</title>
+    <title>네이버 로그인 완료</title>
 </head>
 <body>
-<h1>Naver 로그인 처리 중...</h1>
-
-<pre id="tokenDisplay" style="white-space: pre-wrap; background:#f0f0f0; padding:10px; border:1px solid #ccc;"></pre>
+<h1>네이버 로그인 완료</h1>
+<div id="info"></div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -18,12 +17,12 @@
 
     if (error) {
         alert("네이버 로그인 실패: " + (errorDescription || error));
-        throw new Error("네이버 로그인 실패: " + (errorDescription || error));
+        throw new Error(errorDescription || error);
     }
 
     if (!code || !state) {
-        alert("code 또는 state 파라미터가 없습니다.");
-        throw new Error("code 또는 state 파라미터 없음");
+        alert("code 또는 state 누락");
+        throw new Error("code/state 없음");
     }
 
     fetch(`http://localhost:8080/api/naver/auth?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {
@@ -31,35 +30,32 @@
         credentials: "include"
     })
         .then(res => {
-            if (!res.ok) throw new Error("서버 응답 오류");
+            if (!res.ok) throw new Error("서버 응답 실패");
             return res.json();
         })
         .then(data => {
-            console.log("네이버 JWT 토큰 응답:", data);
             if (data.error) {
                 alert("네이버 로그인 실패: " + (data.errorDescription || data.error));
                 throw new Error(data.errorDescription || data.error);
             }
 
-            // 백엔드가 camelCase로 반환해도, 혹은 네이버 원본 json으로 반환해도 둘 다 커버
-            const accessToken = data.accessToken || data.access_token;
-            const refreshToken = data.refreshToken || data.refresh_token;
-            const tokenType = data.tokenType || data.token_type;
-            const expiresIn = data.expiresIn || data.expires_in;
+            const { accessToken, refreshToken, tokenType, expiresIn, user_id, user_name } = data;
 
-            const tokenDisplay = document.getElementById("tokenDisplay");
-            tokenDisplay.innerText =
-                `Access Token: ${accessToken}\n` +
-                `Refresh Token: ${refreshToken}\n` +
-                `Token Type: ${tokenType}\n` +
-                `Expires In: ${expiresIn}`;
+            alert(`✅ 로그인 성공!\n👤 이름: ${user_name}`);
 
-            alert("로그인 성공! 토큰이 화면에 표시되었습니다.");
-            // 필요시 페이지 이동도 가능
-            // 예: window.location.href = "/main.html";
+            const info = `
+            Access Token : ${accessToken}<br>
+            Refresh Token: ${refreshToken}<br>
+            Token Type   : ${tokenType}<br>
+            Expires In   : ${expiresIn}<br>
+            User ID      : ${user_id}<br>
+            User Name    : ${user_name}
+        `;
+
+            document.getElementById("info").innerHTML = info;
         })
         .catch(err => {
-            console.error("토큰 요청 실패:", err);
+            console.error("네이버 로그인 에러:", err);
             alert("로그인 처리 중 오류 발생");
         });
 </script>

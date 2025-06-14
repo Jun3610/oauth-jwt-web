@@ -34,7 +34,6 @@ public class JwtService {
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512) // if 'Header' or 'payLoad' was changed -> Sign x
                 .setExpiration(expiryDate); //expire time
-
         return builder.compact();
     }
 
@@ -54,9 +53,7 @@ public class JwtService {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     public boolean isTokenValid(String token) {
-
         return !isTokenExpired(token);
     }
 
