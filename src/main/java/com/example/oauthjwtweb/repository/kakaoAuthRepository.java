@@ -1,6 +1,6 @@
-package com.example.ConcertTracker.repository;
+package com.example.oauthjwtweb.repository;
 
-import com.example.ConcertTracker.entity.User;
+import com.example.oauthjwtweb.entity.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 

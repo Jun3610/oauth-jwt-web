@@ -1,4 +1,4 @@
-package com.example.ConcertTracker.entity;
+package com.example.oauthjwtweb.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

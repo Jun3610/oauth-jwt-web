@@ -1,4 +1,4 @@
-package com.example.ConcertTracker.dto.kakaoAuthDto;
+package com.example.oauthjwtweb.dto.KakaoAuthDto;
 
 import lombok.Data;
 

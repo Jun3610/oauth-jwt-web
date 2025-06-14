@@ -1,10 +1,10 @@
-package com.example.ConcertTracker.service;
+package com.example.oauthjwtweb.service;
 
-import com.example.ConcertTracker.dto.AccessTokenResponseDto;
-import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDtoFromKakako;
-import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
-import com.example.ConcertTracker.entity.User;
-import com.example.ConcertTracker.repository.kakaoAuthRepository;
+import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
+import com.example.oauthjwtweb.dto.KakaoAuthDto.AccessTokenResponseDtoFromKakako;
+import com.example.oauthjwtweb.dto.KakaoAuthDto.UserInfoRequestDto;
+import com.example.oauthjwtweb.entity.User;
+import com.example.oauthjwtweb.repository.kakaoAuthRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -37,7 +37,7 @@ public class KakaoAuthService {
         this.jwtService = jwtService;
     }
 
-    private AccessTokenResponseDto tokenDto;
+    private AccessTokenResponseDtoFromJWT tokenDto;
     private LocalDateTime now = LocalDateTime.now();
 
     @Value("${kakao.client-id}")
@@ -97,11 +97,11 @@ public class KakaoAuthService {
 
     // Returning JWT AccessToken, RefreshToken to Client
     @Transactional
-    public AccessTokenResponseDto authWithToken(Optional<User> user) {
+    public AccessTokenResponseDtoFromJWT authWithToken(Optional<User> user) {
         String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
         String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());
         Long accessTokenExpirationMs = jwtService.getAccessTokenExpirationMs();
-        AccessTokenResponseDto tokenResponseDto = new AccessTokenResponseDto(
+        AccessTokenResponseDtoFromJWT tokenResponseDto = new AccessTokenResponseDtoFromJWT(
                 AccessToken,
                 RefreshToken,
                 "Bearer",

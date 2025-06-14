@@ -1,4 +1,4 @@
-package com.example.ConcertTracker.config;
+package com.example.oauthjwtweb.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.example.ConcertTracker.service.JwtService;
+import com.example.oauthjwtweb.service.JwtService;
 
 import java.io.IOException;
 import java.util.List;

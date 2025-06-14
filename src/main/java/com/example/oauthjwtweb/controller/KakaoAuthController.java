@@ -1,10 +1,10 @@
-package com.example.ConcertTracker.controller;
+package com.example.oauthjwtweb.controller;
 
-import com.example.ConcertTracker.dto.AccessTokenResponseDto;
-import com.example.ConcertTracker.dto.kakaoAuthDto.AccessTokenResponseDtoFromKakako;
-import com.example.ConcertTracker.dto.kakaoAuthDto.UserInfoRequestDto;
-import com.example.ConcertTracker.entity.User;
-import com.example.ConcertTracker.service.KakaoAuthService;
+import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
+import com.example.oauthjwtweb.dto.KakaoAuthDto.AccessTokenResponseDtoFromKakako;
+import com.example.oauthjwtweb.dto.KakaoAuthDto.UserInfoRequestDto;
+import com.example.oauthjwtweb.entity.User;
+import com.example.oauthjwtweb.service.KakaoAuthService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class KakaoAuthController {
 
     // Code -> Token
     @PostMapping("/kakao")
-    public AccessTokenResponseDto authorizeKakao(@RequestParam String code) { // Get Authorization
+    public AccessTokenResponseDtoFromJWT authorizeKakao(@RequestParam String code) { // Get Authorization
         AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);

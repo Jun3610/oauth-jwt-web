@@ -1,9 +1,9 @@
-package com.example.ConcertTracker.dto;
+package com.example.oauthjwtweb.dto;
 
 import lombok.Data;
 
 @Data
-public class AccessTokenResponseDto {
+public class AccessTokenResponseDtoFromJWT {
 
     private String accessToken;
     private String refreshToken;
@@ -12,7 +12,7 @@ public class AccessTokenResponseDto {
     private String userId;
     private String username;
 
-    public AccessTokenResponseDto(
+    public AccessTokenResponseDtoFromJWT(
         String accessToken,
         String refreshToken,
         String tokenType,
