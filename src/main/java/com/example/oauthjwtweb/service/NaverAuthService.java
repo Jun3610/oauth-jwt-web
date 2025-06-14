@@ -145,7 +145,7 @@ public class NaverAuthService {
                     User newUser = new User(
                             UUID.randomUUID().toString(),
                             userInfo.getResponse().getId(),
-                            userInfo.getResponse().getNickname(),
+                            userInfo.getResponse().getName(),
                             userInfo.getResponse().getProfile_image(),
                             "NAVER",
                             now

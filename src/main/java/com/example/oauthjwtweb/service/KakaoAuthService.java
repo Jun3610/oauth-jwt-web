@@ -91,7 +91,7 @@ public class KakaoAuthService {
                         userInfo.getId().toString(),
                         userInfo.getKakaoAccount().getProfile().getNickname(),
                         userInfo.getKakaoAccount().getProfile().getProfile_image_url(),
-                        "kakao",
+                        "KAKAO",
                         now
                 );
                     kakaoAuthRepository.save(newUser);
