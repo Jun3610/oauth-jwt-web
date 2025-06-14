@@ -31,7 +31,7 @@ public class KakaoAuthService {
             RestTemplate restTemplate,
             kakaoAuthRepository kakaoAuthRepository,
             JwtService jwtService
-                     ) {
+        ) {
         this.restTemplate = restTemplate;
         this.kakaoAuthRepository = kakaoAuthRepository;
         this.jwtService = jwtService;
@@ -45,7 +45,6 @@ public class KakaoAuthService {
 
     @Value("${kakao.redirect.url}")
     private String redirectUrl;
-
     public String setKakaoUrl() {
         return "https://kauth.kakao.com/oauth/authorize?client_id="
                 + kakaoClientId
@@ -55,7 +54,6 @@ public class KakaoAuthService {
     }
 
     // AuthorizationCode -> AccessToken
-    @Transactional
     public AccessTokenResponseDtoFromKakako kakaoAuthorize(String code) {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add("grant_type", "authorization_code");
@@ -71,7 +69,6 @@ public class KakaoAuthService {
     }
 
     // Get UserInfo with AccessToken from Kakao
-    @Transactional
     public UserInfoRequestDto kakaoGetUserInfo (AccessTokenResponseDtoFromKakako AccessTokenFromKakao) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer " + AccessTokenFromKakao.getAccess_token());
@@ -87,7 +84,7 @@ public class KakaoAuthService {
 
     // FindByAuthId in DataBase Or Set UserInfo to DataBase-> UserInfo
     @Transactional
-    public Optional<User> findOrCreateUserFromOAuth(UserInfoRequestDto userInfo) {
+    public Optional<User> findOrCreateUserFromOAuth_kakao(UserInfoRequestDto userInfo) {
         Optional<User> optionalUser = kakaoAuthRepository.findByOauthId(userInfo.getId().toString())
                 .or( () -> { User newUser = new User(
                         UUID.randomUUID().toString(),
@@ -103,9 +100,8 @@ public class KakaoAuthService {
         return optionalUser;
     }
 
-    // Returning JWT AccessToken, RefreshToken to Client
-    @Transactional
-    public AccessTokenResponseDtoFromJWT authWithToken(Optional<User> user) {
+    // Returning JWT AccessToken, RefreshToken to Client By UserId
+    public AccessTokenResponseDtoFromJWT authWithToken_kakao(Optional<User> user) {
         String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
         String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());
         Long accessTokenExpirationMs = jwtService.getAccessTokenExpirationMs();

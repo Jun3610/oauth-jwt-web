@@ -2,30 +2,31 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8" />
-    <title>Kakao OAuth 콜백</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; }
-    </style>
+    <title>Naver OAuth 콜백</title>
 </head>
 <body>
-<h1>Kakao 로그인 처리 중...</h1>
-
-<div id="result">
-    <p>로그인 정보를 불러오는 중입니다...</p>
-</div>
+<h1>Naver 로그인 처리 중...</h1>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
+    const state = urlParams.get("state");
+    const error = urlParams.get("error");
+    const errorDescription = urlParams.get("error_description");
 
-    if (!code) {
-        alert("카카오 인증 실패: code 없음");
-        throw new Error("code 파라미터가 없습니다");
+    // 실제 로그인 실패시에만 에러 처리
+    if (error) {
+        alert("네이버 로그인 실패: " + (errorDescription || error));
+        throw new Error("네이버 로그인 실패: " + (errorDescription || error));
     }
 
-    fetch(`http://localhost:8080/api/kakao/auth?code=${code}`, {
-        method: "POST",
+    if (!code || !state) {
+        alert("code 또는 state 파라미터가 없습니다.");
+        throw new Error("code 또는 state 파라미터 없음");
+    }
+
+    fetch(`http://localhost:8080/api/naver/auth?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {
+        method: "GET",
         credentials: "include"
     })
         .then(res => {
@@ -35,23 +36,21 @@
             return res.json();
         })
         .then(data => {
-            console.log("JWT 토큰 응답:", data);
-            const resultDiv = document.getElementById("result");
+            console.log("네이버 토큰 응답:", data);
 
-            resultDiv.innerHTML = `
-                <h2>로그인 성공!</h2>
-                <p><strong>Access Token:</strong> ${data.accessToken}</p>
-                <p><strong>Refresh Token:</strong> ${data.refreshToken}</p>
-                <p><strong>Token Type:</strong> ${data.tokenType}</p>
-                <p><strong>Expires In:</strong> ${data.expiresIn} ms</p>
-                <p><strong>User ID:</strong> ${data.userId}</p>
-                <p><strong>Username:</strong> ${data.username}</p>
-            `;
+            // 서버 응답에 error가 실제로 포함된 경우만 실패 처리
+            if (data.error) {
+                alert("네이버 로그인 실패: " + (data.errorDescription || data.error));
+                throw new Error(data.errorDescription || data.error);
+            }
+
+            alert("로그인 성공! 콘솔에서 토큰 확인 가능");
+            // 필요시 다음 페이지로 이동하거나 토큰 저장
+            // window.location.href = "/main.html";
         })
         .catch(err => {
             console.error("토큰 요청 실패:", err);
             alert("로그인 처리 중 오류 발생");
-            document.getElementById("result").innerHTML = "<p style='color:red'>로그인 처리 중 오류가 발생했습니다.</p>";
         });
 </script>
 </body>

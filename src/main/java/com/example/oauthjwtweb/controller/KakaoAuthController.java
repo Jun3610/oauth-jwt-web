@@ -30,7 +30,7 @@ public class KakaoAuthController {
     public AccessTokenResponseDtoFromJWT authorizeKakao(@RequestParam String code) { // Get Authorization
         AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
-        Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth(userInfo);
-        return kakaoAuthService.authWithToken(user);
+        Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth_kakao(userInfo);
+        return kakaoAuthService.authWithToken_kakao(user);
     }
 }
