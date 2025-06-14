@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api/kakao")
 public class KakaoAuthController {
 
     final private KakaoAuthService kakaoAuthService;
@@ -19,8 +19,14 @@ public class KakaoAuthController {
         this.kakaoAuthService = kakaoAuthService;
     }
 
+    //SetUrl
+    @GetMapping("/get")
+    public String getKakaoUrl() {
+        return kakaoAuthService.setKakaoUrl();
+    }
+
     // Code -> Token
-    @PostMapping("/kakao")
+    @PostMapping("/auth")
     public AccessTokenResponseDtoFromJWT authorizeKakao(@RequestParam String code) { // Get Authorization
         AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);

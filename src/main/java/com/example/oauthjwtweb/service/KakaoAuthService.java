@@ -46,6 +46,14 @@ public class KakaoAuthService {
     @Value("${kakao.redirect.url}")
     private String redirectUrl;
 
+    public String setKakaoUrl() {
+        return "https://kauth.kakao.com/oauth/authorize?client_id="
+                + kakaoClientId
+                + "&redirect_uri="
+                + redirectUrl
+                + "&response_type=code";
+    }
+
     // AuthorizationCode -> AccessToken
     @Transactional
     public AccessTokenResponseDtoFromKakako kakaoAuthorize(String code) {

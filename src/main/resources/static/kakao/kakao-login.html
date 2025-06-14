@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kakao OAuth 로그인</title>
+</head>
+<body>
+<h1>Kakao 로그인 테스트</h1>
+<button id="kakaoLoginBtn">Kakao 로그인 시작</button>
+
+<script>
+    document.getElementById("kakaoLoginBtn").addEventListener("click", async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/kakao/get", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (!response.ok) {
+                throw new Error("카카오 로그인 URL 요청 실패");
+            }
+
+            const kakaoLoginUrl = await response.text();
+            window.location.href = kakaoLoginUrl;  // 카카오 로그인 페이지로 이동
+        } catch (error) {
+            console.error("에러 발생:", error);
+            alert("카카오 로그인 중 문제가 발생했습니다.");
+        }
+    });
+</script>
+</body>
+</html>
