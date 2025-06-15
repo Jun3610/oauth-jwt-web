@@ -11,15 +11,26 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
+    const state = urlParams.get("state");
+
+    console.log("Code:", code);
+    console.log("State:", state);
 
     if (!code) {
         alert("구글 로그인 실패: code 파라미터 없음");
         throw new Error("구글 로그인 실패: code 없음");
     }
 
-    fetch(`http://localhost:8080/api/google/auth?code=${encodeURIComponent(code)}`, {
+    fetch("http://localhost:8080/api/google/auth", {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+            code: code,
+            state: state
+        })
     })
         .then(res => {
             if (!res.ok) throw new Error("서버 응답 실패");
@@ -42,7 +53,7 @@
 ⏳ Expires In    : ${expiresIn}
 🆔 User ID       : ${userId}
 👤 Username      : ${username}
-            `;
+        `;
 
             document.getElementById("info").textContent = output;
         })
