@@ -5,8 +5,8 @@
     <title>구글 로그인 완료</title>
 </head>
 <body>
-<h1>구글 로그인 완료</h1>
-<div id="info"></div>
+<h1>구글 로그인 결과</h1>
+<div id="info" style="white-space: pre-wrap; font-family: monospace;"></div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -26,25 +26,25 @@
             return res.json();
         })
         .then(data => {
-            if (data.error) {
-                alert("구글 로그인 실패: " + (data.errorDescription || data.error));
-                throw new Error(data.errorDescription || data.error);
-            }
+            const {
+                accessToken,
+                refreshToken,
+                tokenType,
+                expiresIn,
+                userId,
+                username
+            } = data;
 
-            const { accessToken, refreshToken, tokenType, expiresIn, user_id, user_name } = data;
+            const output = `
+🔐 Access Token  : ${accessToken}
+♻️  Refresh Token : ${refreshToken}
+📘 Token Type    : ${tokenType}
+⏳ Expires In    : ${expiresIn}
+🆔 User ID       : ${userId}
+👤 Username      : ${username}
+            `;
 
-            alert(`✅ 로그인 성공!\n👤 이름: ${user_name}`);
-
-            const info = `
-            Access Token : ${accessToken}<br>
-            Refresh Token: ${refreshToken}<br>
-            Token Type   : ${tokenType}<br>
-            Expires In   : ${expiresIn}<br>
-            User ID      : ${user_id}<br>
-            User Name    : ${user_name}
-        `;
-
-            document.getElementById("info").innerHTML = info;
+            document.getElementById("info").textContent = output;
         })
         .catch(err => {
             console.error("구글 로그인 에러:", err);
