@@ -1,6 +1,6 @@
 package com.example.oauthjwtweb.service;
 
-import com.example.oauthjwtweb.dto.test.TestEnviornmnetVariableDto;
+import com.example.oauthjwtweb.dto.testDto.TestEnviornmnetVariableDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

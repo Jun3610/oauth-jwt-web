@@ -74,6 +74,7 @@ public class KakaoAuthService {
     public UserInfoRequestDto kakaoGetUserInfo (AccessTokenResponseDtoFromKakako AccessTokenFromKakao) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer " + AccessTokenFromKakao.getAccess_token());
+
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<UserInfoRequestDto> userInfo = restTemplate.exchange(
                 "https://kapi.kakao.com/v2/user/me",

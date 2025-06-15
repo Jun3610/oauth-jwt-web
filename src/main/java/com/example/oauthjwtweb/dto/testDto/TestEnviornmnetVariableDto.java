@@ -1,4 +1,4 @@
-package com.example.oauthjwtweb.dto.test;
+package com.example.oauthjwtweb.dto.testDto;
 
 import lombok.Data;
 

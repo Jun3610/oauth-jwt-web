@@ -83,12 +83,12 @@ public class NaverAuthService {
         }
         try {
             MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+            HttpHeaders headers = new HttpHeaders();
             multiValueMap.add("grant_type", "authorization_code");
             multiValueMap.add("client_id", clientId);
             multiValueMap.add("client_secret", clientSecret);
             multiValueMap.add("code", code);
             multiValueMap.add("state", state);
-            HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(multiValueMap, headers);

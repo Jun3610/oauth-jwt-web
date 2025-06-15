@@ -1,6 +1,6 @@
 package com.example.oauthjwtweb.controller;
 
-import com.example.oauthjwtweb.dto.test.TestEnviornmnetVariableDto;
+import com.example.oauthjwtweb.dto.testDto.TestEnviornmnetVariableDto;
 import com.example.oauthjwtweb.service.TesService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
