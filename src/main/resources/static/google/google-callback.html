@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>구글 로그인 완료</title>
+</head>
+<body>
+<h1>구글 로그인 완료</h1>
+<div id="info"></div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (!code) {
+        alert("구글 로그인 실패: code 파라미터 없음");
+        throw new Error("구글 로그인 실패: code 없음");
+    }
+
+    fetch(`http://localhost:8080/api/google/auth?code=${encodeURIComponent(code)}`, {
+        method: "POST",
+        credentials: "include"
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("서버 응답 실패");
+            return res.json();
+        })
+        .then(data => {
+            if (data.error) {
+                alert("구글 로그인 실패: " + (data.errorDescription || data.error));
+                throw new Error(data.errorDescription || data.error);
+            }
+
+            const { accessToken, refreshToken, tokenType, expiresIn, user_id, user_name } = data;
+
+            alert(`✅ 로그인 성공!\n👤 이름: ${user_name}`);
+
+            const info = `
+            Access Token : ${accessToken}<br>
+            Refresh Token: ${refreshToken}<br>
+            Token Type   : ${tokenType}<br>
+            Expires In   : ${expiresIn}<br>
+            User ID      : ${user_id}<br>
+            User Name    : ${user_name}
+        `;
+
+            document.getElementById("info").innerHTML = info;
+        })
+        .catch(err => {
+            console.error("구글 로그인 에러:", err);
+            alert("로그인 처리 중 오류 발생");
+        });
+</script>
+</body>
+</html>
