@@ -22,7 +22,7 @@ public class KakaoAuthController {
     //SetUrl
     @GetMapping("/get")
     public String getKakaoUrl() {
-        return kakaoAuthService.setKakaoUrl();
+        return kakaoAuthService.setKakaoAuthUrl();
     }
 
     // Code -> Token

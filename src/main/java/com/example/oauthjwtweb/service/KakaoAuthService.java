@@ -47,7 +47,7 @@ public class KakaoAuthService {
     private String redirectUrl;
 
     // AuthUrlSetting
-    public String setKakaoUrl() {
+    public String setKakaoAuthUrl() {
         return "https://kauth.kakao.com/oauth/authorize?client_id="
                 + kakaoClientId
                 + "&redirect_uri="

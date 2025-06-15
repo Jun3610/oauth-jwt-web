@@ -61,7 +61,7 @@ public class NaverAuthService {
     }
 
     // session Setting in Url -> to Client
-    public String createNaverLoginURL(HttpSession session) {
+    public String SetNaverAuthUrl(HttpSession session) {
         return "https://nid.naver.com/oauth2.0/authorize"
                 + "?response_type=code"
                 + "&client_id=" + clientId

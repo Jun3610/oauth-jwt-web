@@ -23,7 +23,7 @@ public class NaverAuthController {
     @PostMapping("/get")
     public String setUrlWithSession(HttpSession session) { // Set By Spring
         naverAuthService.setStateInSession(session);
-        return naverAuthService.createNaverLoginURL(session);
+        return naverAuthService.SetNaverAuthUrl(session);
     }
 
     @GetMapping("/auth")
