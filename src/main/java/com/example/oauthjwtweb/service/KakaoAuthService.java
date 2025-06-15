@@ -4,7 +4,7 @@ import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
 import com.example.oauthjwtweb.dto.KakaoAuthDto.AccessTokenResponseDtoFromKakako;
 import com.example.oauthjwtweb.dto.KakaoAuthDto.UserInfoRequestDto;
 import com.example.oauthjwtweb.entity.User;
-import com.example.oauthjwtweb.repository.kakaoAuthRepository;
+import com.example.oauthjwtweb.repository.KakaoAuthRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @Service
 public class KakaoAuthService {
     final private RestTemplate restTemplate;
-    final private kakaoAuthRepository kakaoAuthRepository;
+    final private KakaoAuthRepository kakaoAuthRepository;
     final private JwtService jwtService;
 
     //config made by Spring
     KakaoAuthService(
             RestTemplate restTemplate,
-            kakaoAuthRepository kakaoAuthRepository,
+            KakaoAuthRepository kakaoAuthRepository,
             JwtService jwtService
         ) {
         this.restTemplate = restTemplate;
