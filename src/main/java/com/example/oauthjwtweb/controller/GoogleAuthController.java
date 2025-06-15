@@ -1,17 +1,27 @@
 package com.example.oauthjwtweb.controller;
 
+import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
+import com.example.oauthjwtweb.dto.googleAuthDto.AccessTokenResponeDtoFromGoogle;
+import com.example.oauthjwtweb.dto.googleAuthDto.UserInfoRequestDto;
+import com.example.oauthjwtweb.entity.User;
+import com.example.oauthjwtweb.repository.GoogleAuthRepository;
 import com.example.oauthjwtweb.service.GoogleAuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/google")
 public class GoogleAuthController {
 
     final private GoogleAuthService googleAuthService;
+    private final GoogleAuthRepository googleAuthRepository;
 
-    GoogleAuthController(GoogleAuthService googleAuthService) {
+
+    GoogleAuthController(GoogleAuthService googleAuthService, GoogleAuthRepository googleAuthRepository) {
         this.googleAuthService = googleAuthService;
+        this.googleAuthRepository = googleAuthRepository;
     }
 
     @GetMapping("/get")
@@ -21,11 +31,15 @@ public class GoogleAuthController {
     }
 
     @PostMapping("/auth")
-    public void authorizeGoogle (@RequestParam String code,
-                                 @RequestParam String state,
-                                 HttpSession session
+    public AccessTokenResponseDtoFromJWT authorizeGoogle (
+            @RequestParam String code,
+            @RequestParam String state,
+            HttpSession session
     ) {
-        System.out.println("로그확인용");
-        googleAuthService.googleAuthorize(code, state, session);
+        AccessTokenResponeDtoFromGoogle accessToken = googleAuthService.googleAuthorize(code, state, session);
+        UserInfoRequestDto userInfo =  googleAuthService.googleGetUserInfo(accessToken);
+        Optional<User> optionalUser = googleAuthService.findOrCreateUserFromOAuth_google(userInfo);
+        return googleAuthService.authWithToken_google(optionalUser);
     }
+
 }
