@@ -1,4 +1,4 @@
-package com.example.oauthjwtweb.dto.KakaoAuthDto;
+package com.example.oauthjwtweb.dto.kakaoAuthDto;
 
 import lombok.Data;
 

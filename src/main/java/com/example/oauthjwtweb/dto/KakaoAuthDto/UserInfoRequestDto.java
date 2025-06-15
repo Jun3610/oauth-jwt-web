@@ -1,4 +1,4 @@
-package com.example.oauthjwtweb.dto.KakaoAuthDto;
+package com.example.oauthjwtweb.dto.kakaoAuthDto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

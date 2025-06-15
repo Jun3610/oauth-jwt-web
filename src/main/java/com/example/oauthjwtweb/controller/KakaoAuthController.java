@@ -1,8 +1,8 @@
 package com.example.oauthjwtweb.controller;
 
 import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
-import com.example.oauthjwtweb.dto.KakaoAuthDto.AccessTokenResponseDtoFromKakako;
-import com.example.oauthjwtweb.dto.KakaoAuthDto.UserInfoRequestDto;
+import com.example.oauthjwtweb.dto.kakaoAuthDto.AccessTokenResponseDtoFromKakako;
+import com.example.oauthjwtweb.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.service.KakaoAuthService;
 import org.springframework.web.bind.annotation.*;
