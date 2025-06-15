@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GoogleAuthRepository extends JpaRepository<User, String> {
-
-
 }
 
