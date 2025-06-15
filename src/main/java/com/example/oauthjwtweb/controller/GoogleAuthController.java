@@ -25,6 +25,7 @@ public class GoogleAuthController {
                                  @RequestParam String state,
                                  HttpSession session
     ) {
+        System.out.println("로그확인용");
         googleAuthService.googleAuthorize(code, state, session);
     }
 }

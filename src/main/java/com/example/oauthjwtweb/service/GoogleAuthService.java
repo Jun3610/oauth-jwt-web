@@ -19,11 +19,10 @@ public class GoogleAuthService {
     @Value("${google.redirect-uri}")
     private String redirectUri;
 
+    //Setting Session
     public void setStateInSession(HttpSession session) {
         session.setAttribute("state", UUID.randomUUID().toString());
     }
-
-    Logger logger = Logger.getLogger(GoogleAuthService.class.getName());
 
     // AuthUrlSetting
     public String setGoogleAuthUrl(HttpSession session) {
@@ -37,13 +36,13 @@ public class GoogleAuthService {
                 +"&client_id=" + clientId;
     }
 
+    // AuthorizationCode -> AccessToken
     public void googleAuthorize(String code, String state, HttpSession session) {
-
+        System.out.println("로그 확인용!!!!");
         String serverSession = (String) session.getAttribute("state");
         if (state == null || serverSession == null || state.isEmpty() || !state.equals(serverSession) || code == null || code.isEmpty()) {
             throw new RuntimeException("보안문제 발생");
         }
 
-                
     }
 }
