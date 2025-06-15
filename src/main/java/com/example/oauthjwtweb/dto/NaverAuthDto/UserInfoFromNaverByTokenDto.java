@@ -1,4 +1,4 @@
-package com.example.oauthjwtweb.dto.NaverAuthDto;
+package com.example.oauthjwtweb.dto.naverAuthDto;
 
 import lombok.Data;
 

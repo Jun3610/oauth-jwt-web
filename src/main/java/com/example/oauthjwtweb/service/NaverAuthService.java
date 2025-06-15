@@ -1,8 +1,8 @@
 package com.example.oauthjwtweb.service;
 
 import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
-import com.example.oauthjwtweb.dto.NaverAuthDto.AccessTokenResponseDtoFromNaver;
-import com.example.oauthjwtweb.dto.NaverAuthDto.UserInfoFromNaverByTokenDto;
+import com.example.oauthjwtweb.dto.naverAuthDto.AccessTokenResponseDtoFromNaver;
+import com.example.oauthjwtweb.dto.naverAuthDto.UserInfoFromNaverByTokenDto;
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.NaverAuthRepository;
 import jakarta.servlet.http.HttpSession;
