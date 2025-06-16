@@ -8,7 +8,6 @@ import com.example.oauthjwtweb.repository.GoogleAuthRepository;
 import com.example.oauthjwtweb.service.GoogleAuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
@@ -17,7 +16,6 @@ public class GoogleAuthController {
 
     final private GoogleAuthService googleAuthService;
     private final GoogleAuthRepository googleAuthRepository;
-
 
     GoogleAuthController(GoogleAuthService googleAuthService, GoogleAuthRepository googleAuthRepository) {
         this.googleAuthService = googleAuthService;

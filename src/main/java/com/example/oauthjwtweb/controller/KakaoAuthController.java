@@ -5,6 +5,7 @@ import com.example.oauthjwtweb.dto.kakaoAuthDto.AccessTokenResponseDtoFromKakako
 import com.example.oauthjwtweb.dto.kakaoAuthDto.UserInfoRequestDto;
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.service.KakaoAuthService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,14 +22,14 @@ public class KakaoAuthController {
 
     //SetUrl
     @GetMapping("/get")
-    public String getKakaoUrl() {
-        return kakaoAuthService.setKakaoAuthUrl();
+    public String getKakaoUrl(HttpSession session) {
+        return kakaoAuthService.setKakaoAuthUrl(session);
     }
 
     // Code -> Token
     @PostMapping("/auth")
-    public AccessTokenResponseDtoFromJWT authorizeKakao(@RequestParam String code) { // Get Authorization
-        AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code); // send Authorization to service
+    public AccessTokenResponseDtoFromJWT authorizeKakao(@RequestParam String code, @RequestParam String state,  HttpSession session) { // Get Authorization
+        AccessTokenResponseDtoFromKakako AccessToken = kakaoAuthService.kakaoAuthorize(code,state,session);
         UserInfoRequestDto userInfo = kakaoAuthService.kakaoGetUserInfo(AccessToken);
         Optional<User> user = kakaoAuthService.findOrCreateUserFromOAuth_kakao(userInfo);
         return kakaoAuthService.authWithToken_kakao(user);
