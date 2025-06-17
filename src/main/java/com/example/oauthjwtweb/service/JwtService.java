@@ -5,11 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 
+@Getter
 @Service
 public class JwtService {
 
@@ -48,19 +50,6 @@ public class JwtService {
         return builder.compact();
     }
 
-    // TokenExpirationMs -> FrontEnd
-    public Long getAccessTokenExpirationMs() {return accessTokenExpirationMs;}
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public boolean isTokenValid(String token) {
-        return !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
     private Date extractExpiration(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -68,6 +57,14 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public boolean isTokenValid(String token) {
+        return !isTokenExpired(token);
     }
 
     public String extractUserId(String token) {
