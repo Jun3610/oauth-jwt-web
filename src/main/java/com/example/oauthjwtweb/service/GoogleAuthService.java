@@ -1,10 +1,8 @@
 package com.example.oauthjwtweb.service;
 
-import com.example.oauthjwtweb.controller.GoogleAuthController;
 import com.example.oauthjwtweb.dto.AccessTokenResponseDtoFromJWT;
 import com.example.oauthjwtweb.dto.googleAuthDto.AccessTokenResponeDtoFromGoogle;
 import com.example.oauthjwtweb.dto.googleAuthDto.UserInfoRequestDto;
-import com.example.oauthjwtweb.dto.naverAuthDto.UserInfoFromNaverByTokenDto;
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.GoogleAuthRepository;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +32,8 @@ public class GoogleAuthService {
 
     private final GoogleAuthRepository googleAuthRepository;
     private final JwtService jwtService;
+    private final RestTemplate restTemplate;
+    
     @Value("${google.client-id}")
     private String clientId;
 
@@ -43,12 +43,12 @@ public class GoogleAuthService {
     @Value("${google.redirect-uri}")
     private String redirectUri;
 
-    RestTemplate restTemplate = new RestTemplate();
     private Logger logger = Logger.getLogger(GoogleAuthService.class.getName());
 
-    public GoogleAuthService(GoogleAuthRepository googleAuthRepository, JwtService jwtService) {
+    public GoogleAuthService(GoogleAuthRepository googleAuthRepository, JwtService jwtService, RestTemplate restTemplate) {
         this.googleAuthRepository = googleAuthRepository;
         this.jwtService = jwtService;
+        this.restTemplate = restTemplate;
     }
 
     private AccessTokenResponseDtoFromJWT tokenDto;
