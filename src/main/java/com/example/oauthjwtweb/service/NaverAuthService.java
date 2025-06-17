@@ -7,6 +7,7 @@ import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.NaverAuthRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
@@ -41,6 +42,7 @@ public class NaverAuthService {
     @Value("${naver.callback.url}")
     private String callbackUrl;
 
+    @Autowired
     public NaverAuthService(SecurityExpressionHandler<FilterInvocation> webSecurityExpressionHandler,
                             NaverAuthRepository naverAuthRepository,
                             RestTemplate restTemplate,

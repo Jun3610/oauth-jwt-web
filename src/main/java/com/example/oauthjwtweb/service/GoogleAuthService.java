@@ -7,6 +7,7 @@ import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.GoogleAuthRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +46,7 @@ public class GoogleAuthService {
 
     private Logger logger = Logger.getLogger(GoogleAuthService.class.getName());
 
+    @Autowired
     public GoogleAuthService(GoogleAuthRepository googleAuthRepository, JwtService jwtService, RestTemplate restTemplate) {
         this.googleAuthRepository = googleAuthRepository;
         this.jwtService = jwtService;
