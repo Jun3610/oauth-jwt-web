@@ -11,16 +11,17 @@ public class CorsConfig {
 
     @Bean
     public CorsConfigurationSource corsFilter() {
-
         CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedHeader("*"); //Content-Type, Authorization ...
+        configuration.addAllowedMethod("*"); // POST, GET ...
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/api", configuration);
         // registerCorsConfiguration(A, B): apply policy B to path A
-        // Apply configuration to path "/**"
+        // Apply configuration to path "/api"
 
         return source;
-
     }
 }
