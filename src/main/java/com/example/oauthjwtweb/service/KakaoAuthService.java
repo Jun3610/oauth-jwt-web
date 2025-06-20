@@ -148,7 +148,7 @@ public class KakaoAuthService {
                 "Bearer",
                 accessTokenExpirationMs,
                 user.get().getUser_id(),
-                user.get().getUser_name()
+                user.get().getUserName()
         );
         return tokenResponseDto;
     }

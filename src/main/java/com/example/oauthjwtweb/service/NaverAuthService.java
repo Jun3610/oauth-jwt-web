@@ -167,7 +167,7 @@ public class NaverAuthService {
                 "Bearer",
                 jwtService.getAccessTokenExpirationMs(),
                 user.get().getUser_id(),
-                user.get().getUser_name()
+                user.get().getUserName()
         );
         return accessTokenResponseDtoFromJWT;
     }

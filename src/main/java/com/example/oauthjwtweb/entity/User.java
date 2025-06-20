@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +27,7 @@ public class User {
     private String email;
 
     @Column(name = "username")
-    private String user_name;
+    private String userName;
 
     @Column(name = "profile_image")
     private String profile_image;
@@ -57,7 +56,7 @@ public class User {
 
                 this.user_id = user_id;
                 this.oauthId = oauthId;
-                this.user_name = user_name;
+                this.userName = user_name;
                 this.profile_image = profile_image;
                 this.provider = provider;
                 this.created_at = created_at;

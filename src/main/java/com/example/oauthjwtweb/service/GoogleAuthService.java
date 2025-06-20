@@ -164,7 +164,7 @@ public class GoogleAuthService {
                 "Bearer",
                 jwtService.getAccessTokenExpirationMs(),
                 optionalUser.get().getUser_id(),
-                optionalUser.get().getUser_name()
+                optionalUser.get().getUserName()
         );
         return accessTokenResponseDtoFromJWT;
     }
