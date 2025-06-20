@@ -1,16 +1,16 @@
 package com.example.oauthjwtweb.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-@Setter
-@Getter
+@Data
 @Entity
 @Table (name = "user")
 public class User {
@@ -38,6 +38,15 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDateTime created_at;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public User(String user_id,
                 String oauthId,
