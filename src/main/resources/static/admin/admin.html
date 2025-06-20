@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>관리자 페이지 - 사용자 목록</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #aaa;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<h1>관리자 페이지 - 사용자 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>User ID</th>
+        <th>OAuth ID</th>
+        <th>Username</th>
+        <th>Provider</th>
+        <th>Created At</th>
+        <th>Profile Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.userId}">userId</td>
+        <td th:text="${user.oauthId}">oauthId</td>
+        <td th:text="${user.username}">username</td>
+        <td th:text="${user.provider}">provider</td>
+        <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}">createdAt</td>
+        <td>
+            <img th:src="${user.profileImage}" alt="Profile Image" width="50" height="50" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
