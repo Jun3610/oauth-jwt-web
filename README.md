@@ -1,3 +1,4 @@
-- Kakao, Google, Naver OAuth 로그인 및 회원가입 기능 지원  
-- Admin 관리자 권한 부여 가능  
+- Kakao, Google, Naver OAuth 로그인 및 회원가입 기능
+- 관리자 권한 부여 가능 (Admin)
 - 테스트용 HTML 페이지 제공 (각 로그인 페이지 및 관리자 전용 관리 페이지 포함)
+- 환경 변수를 사용하므로, 교체만으로 설정 변경이 가능합니다.
