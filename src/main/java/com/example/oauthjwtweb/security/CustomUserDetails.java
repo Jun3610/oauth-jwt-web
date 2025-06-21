@@ -40,21 +40,21 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;  // 필요하면 구현
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;  // 필요하면 구현
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;  // 필요하면 구현
+        return true;  //
     }
 
     @Override
     public boolean isEnabled() {
-        return true;  // 필요하면 구현
+        return true;
     }
 }

@@ -24,11 +24,17 @@ public class AdminController {
     @GetMapping
     public String showUserList(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("현재 사용자 권한 목록: " + auth.getAuthorities()); // ✅ 확인포인트
+
+        System.out.println("AdminController: showUserList() 호출됨");
+        System.out.println("현재 사용자 이름: " + auth.getName());
+        System.out.println("현재 사용자 권한 목록: " + auth.getAuthorities());
 
         List<User> users = userService.getAllUsers();
+        System.out.println("조회된 사용자 수: " + users.size());
+
         model.addAttribute("users", users);
         return "admin/admin";
     }
+
 
 }

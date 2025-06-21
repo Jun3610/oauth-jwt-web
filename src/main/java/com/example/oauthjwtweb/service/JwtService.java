@@ -3,6 +3,7 @@ package com.example.oauthjwtweb.service;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -22,6 +23,9 @@ public class JwtService {
 
     private Key key;
 
+    @Value("${jwt.secret.key}")
+    private String secretKey;
+
     @Value("${jwt.accessTokenExpirationMs}")
     private Long accessTokenExpirationMs;
 
@@ -30,7 +34,8 @@ public class JwtService {
 
     @PostConstruct
     public void init() { // BASE64 -> byte[] -> Key
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateAccessToken(String user_id, List<String> roles) {

@@ -40,11 +40,11 @@
     <tr th:each="user : ${users}">
         <td th:text="${user.userId}">userId</td>
         <td th:text="${user.oauthId}">oauthId</td>
-        <td th:text="${user.username}">username</td>
+        <td th:text="${user.userName}">userName</td>
         <td th:text="${user.provider}">provider</td>
-        <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}">createdAt</td>
+        <td th:text="${#temporals.format(user.created_at, 'yyyy-MM-dd HH:mm:ss')}">created_at</td>
         <td>
-            <img th:src="${user.profileImage}" alt="Profile Image" width="50" height="50" />
+            <img th:src="${user.profile_image}" alt="Profile Image" width="50" height="50" />
         </td>
     </tr>
     </tbody>
