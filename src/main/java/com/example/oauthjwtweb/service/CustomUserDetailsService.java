@@ -2,6 +2,7 @@ package com.example.oauthjwtweb.service;
 
 import com.example.oauthjwtweb.entity.User;
 import com.example.oauthjwtweb.repository.UserRepository;
+import com.example.oauthjwtweb.security.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,9 +15,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetailsService(UserRepository userRepository){this.userRepository = userRepository;}
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with userId: " + userId));
         return new CustomUserDetails(user);
     }
 }

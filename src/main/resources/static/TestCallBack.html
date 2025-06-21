@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 결과</title>
+</head>
+<body>
+<h1>로그인 완료</h1>
+<div id="userInfo"></div>
+<button id="adminBtn" style="display:none;">관리자 페이지로 이동</button>
+
+<script>
+    // 쿼리에서 code, state, provider 받기 (provider는 URL 경로 또는 쿼리로 넘긴다고 가정)
+    // 예: http://localhost:8080/TestCallBack.html?provider=kakao&code=abc&state=xyz
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    const provider = params.get("provider"); // google, kakao, naver 중 하나여야 함
+
+    if (!code || !state || !provider) {
+        alert("로그인 정보가 없습니다.");
+        throw new Error("필수 쿼리 파라미터 누락");
+    }
+
+    const fetchTokens = async () => {
+        try {
+            const url = `http://localhost:8080/api/${provider}/auth?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
+            const method = provider === "naver" ? "GET" : "POST"; // naver는 GET으로 바꾸세요 (필요시)
+
+            const response = await fetch(url, {
+                method: method,
+                credentials: "include"
+            });
+            if (!response.ok) throw new Error("토큰 발급 실패");
+
+            const tokens = await response.json();
+            const { accessToken, refreshToken, username } = tokens;
+
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+
+            document.getElementById("userInfo").innerText = `안녕하세요, ${username || '사용자'}님!`;
+            document.getElementById("adminBtn").style.display = "inline-block";
+
+        } catch (err) {
+            alert("로그인 처리 중 오류가 발생했습니다.");
+            console.error(err);
+        }
+    };
+
+    fetchTokens();
+
+    document.getElementById("adminBtn").addEventListener("click", () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        fetch("/admin", {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(res => {
+                if (res.status === 403) {
+                    alert("권한이 없습니다!");
+                    return;
+                }
+                if (!res.ok) throw new Error("접근 실패");
+                return res.text();
+            })
+            .then(html => {
+                if (html) {
+                    const win = window.open();
+                    win.document.write(html);
+                    win.document.close();
+                }
+            })
+            .catch(err => alert("오류: " + err.message));
+    });
+</script>
+</body>
+</html>

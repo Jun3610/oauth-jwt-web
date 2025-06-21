@@ -23,9 +23,12 @@ public class AdminController {
 
     @GetMapping
     public String showUserList(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("현재 사용자 권한 목록: " + auth.getAuthorities()); // ✅ 확인포인트
+
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return "admin/admin";  // 폴더/파일명 구조로 변경
+        return "admin/admin";
     }
+
 }

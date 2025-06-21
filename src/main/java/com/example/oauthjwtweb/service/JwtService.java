@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+
 
 @Getter
 @Service
@@ -28,11 +33,12 @@ public class JwtService {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
-    public String generateAccessToken(String user_id) {
+    public String generateAccessToken(String user_id, List<String> roles) {
         JwtBuilder builder = Jwts.builder(); // JWT Method Setting
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
         builder.setSubject(user_id) // Set information to AccessToken
+                .claim("roles", roles)
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512) // if 'Header' or 'payLoad' was changed -> Sign x
                 .setExpiration(expiryDate); //expire time
@@ -75,5 +81,14 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
+    public Claims parseClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }
+
 

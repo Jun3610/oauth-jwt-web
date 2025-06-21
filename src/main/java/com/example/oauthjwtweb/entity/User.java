@@ -18,7 +18,7 @@ public class User {
 
     @Id
     @Column(name = "user_id", unique = true, nullable = false)
-    private String user_id;
+    private String userId;
 
     @Column(name = "OAuth_id")
     private String oauthId;
@@ -45,7 +45,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User(String user_id,
                 String oauthId,
@@ -54,7 +54,7 @@ public class User {
                 String provider,
                 LocalDateTime created_at) {
 
-                this.user_id = user_id;
+                this.userId = user_id;
                 this.oauthId = oauthId;
                 this.userName = user_name;
                 this.profile_image = profile_image;

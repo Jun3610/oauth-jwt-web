@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>OAuth 통합 로그인</title>
+</head>
+<body>
+<h1>OAuth 통합 로그인</h1>
+
+<button id="googleLoginBtn">Google 로그인</button>
+<button id="kakaoLoginBtn">Kakao 로그인</button>
+<button id="naverLoginBtn">Naver 로그인</button>
+
+<script>
+    // OAuth 로그인 URL 받아서 직접 리다이렉트하는 함수
+    const oauthLogin = async (provider, method = "GET") => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/${provider}/get`, {
+                method: method,
+                credentials: "include"
+            });
+            if (!response.ok) throw new Error(`${provider} 로그인 URL 요청 실패`);
+
+            const loginUrl = await response.text();
+            window.location.href = loginUrl;
+        } catch (error) {
+            alert(`${provider} 로그인 중 문제가 발생했습니다.`);
+            console.error(error);
+        }
+    };
+
+    document.getElementById("googleLoginBtn").onclick = () => oauthLogin("google", "GET");
+    document.getElementById("kakaoLoginBtn").onclick = () => oauthLogin("kakao", "GET");
+    document.getElementById("naverLoginBtn").onclick = () => oauthLogin("naver", "POST");
+</script>
+</body>
+</html>

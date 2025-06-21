@@ -24,9 +24,11 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class GoogleAuthService {
@@ -156,15 +158,18 @@ public class GoogleAuthService {
     }
 
     // Returning JWT AccessToken, RefreshToken to Client By UserId
-    public AccessTokenResponseDtoFromJWT authWithToken_google(Optional<User> optionalUser) {
+    public AccessTokenResponseDtoFromJWT authWithToken_google(Optional<User> user) {
+        List<String> roles = user.get().getRoles()
+                .stream().map(role -> role.getRoleName())  // Role 객체에서 권한명 추출
+                .collect(Collectors.toList());
         AccessTokenResponseDtoFromJWT accessTokenResponseDtoFromJWT
                 = new AccessTokenResponseDtoFromJWT(
-                jwtService.generateAccessToken(optionalUser.get().getUser_id()),
-                jwtService.generateRefreshToken(optionalUser.get().getUser_id()),
+                jwtService.generateAccessToken(user.get().getUserId(), roles),
+                jwtService.generateRefreshToken(user.get().getUserId()),
                 "Bearer",
                 jwtService.getAccessTokenExpirationMs(),
-                optionalUser.get().getUser_id(),
-                optionalUser.get().getUserName()
+                user.get().getUserId(),
+                user.get().getUserName()
         );
         return accessTokenResponseDtoFromJWT;
     }

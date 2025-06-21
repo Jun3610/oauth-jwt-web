@@ -22,8 +22,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class NaverAuthService {
@@ -160,13 +162,16 @@ public class NaverAuthService {
 
     // Returning JWT AccessToken, RefreshToken to Client By UserId
     public AccessTokenResponseDtoFromJWT authWithToken_naver(Optional<User> user) {
+        List<String> roles = user.get().getRoles()
+                .stream().map(role -> role.getRoleName())  // Role 객체에서 권한명 추출
+                .collect(Collectors.toList());
         AccessTokenResponseDtoFromJWT accessTokenResponseDtoFromJWT =
                 new AccessTokenResponseDtoFromJWT(
-                jwtService.generateAccessToken(user.get().getUser_id()),
-                jwtService.generateRefreshToken(user.get().getUser_id()),
+                jwtService.generateAccessToken(user.get().getUserId(), roles),
+                jwtService.generateRefreshToken(user.get().getUserId()),
                 "Bearer",
                 jwtService.getAccessTokenExpirationMs(),
-                user.get().getUser_id(),
+                user.get().getUserId(),
                 user.get().getUserName()
         );
         return accessTokenResponseDtoFromJWT;

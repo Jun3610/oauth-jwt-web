@@ -24,8 +24,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class KakaoAuthService {
@@ -139,15 +141,18 @@ public class KakaoAuthService {
 
     // Returning JWT AccessToken, RefreshToken to Client By UserId
     public AccessTokenResponseDtoFromJWT authWithToken_kakao(Optional<User> user) {
-        String AccessToken = jwtService.generateAccessToken(user.get().getUser_id());
-        String RefreshToken = jwtService.generateRefreshToken(user.get().getUser_id());
+        List<String> roles = user.get().getRoles()
+                .stream().map(role -> role.getRoleName())  // Role 객체에서 권한명 추출
+                .collect(Collectors.toList());
+        String AccessToken = jwtService.generateAccessToken(user.get().getUserId(),roles);
+        String RefreshToken = jwtService.generateRefreshToken(user.get().getUserId());
         Long accessTokenExpirationMs = jwtService.getAccessTokenExpirationMs();
         AccessTokenResponseDtoFromJWT tokenResponseDto = new AccessTokenResponseDtoFromJWT(
                 AccessToken,
                 RefreshToken,
                 "Bearer",
                 accessTokenExpirationMs,
-                user.get().getUser_id(),
+                user.get().getUserId(),
                 user.get().getUserName()
         );
         return tokenResponseDto;
