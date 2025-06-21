@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>카카오 로그인 완료</h1>
-<div id="info"></div>
+<div id="info" style="white-space: pre-wrap; font-family: monospace;"></div>
 <button id="adminBtn" style="display:none;">관리자 페이지로 이동</button>
 
 <script>
@@ -25,9 +25,7 @@
         credentials: "include"
     })
         .then(res => {
-            if (!res.ok) {
-                throw new Error("서버 응답 실패");
-            }
+            if (!res.ok) throw new Error("서버 응답 실패");
             return res.json();
         })
         .then(data => {
@@ -36,9 +34,8 @@
                 throw new Error(data.errorDescription || data.error);
             }
 
-            const { accessToken, refreshToken, username } = data;
+            const { accessToken, refreshToken, tokenType, expiresIn, userId, username } = data;
 
-            // 토큰 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
 
@@ -46,11 +43,15 @@
 
             const info = `
             <h3>로그인 성공!</h3>
-            <p><strong>User Name</strong>: ${username}</p>
+            <p><strong>Access Token:</strong> ${accessToken}</p>
+            <p><strong>Refresh Token:</strong> ${refreshToken}</p>
+            <p><strong>Token Type:</strong> ${tokenType}</p>
+            <p><strong>Expires In:</strong> ${expiresIn}ms</p>
+            <p><strong>User ID:</strong> ${userId}</p>
+            <p><strong>User Name:</strong> ${username}</p>
         `;
             document.getElementById("info").innerHTML = info;
 
-            // 관리자 페이지 버튼 보이기
             document.getElementById("adminBtn").style.display = "inline-block";
         })
         .catch(err => {
@@ -58,7 +59,6 @@
             alert("로그인 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
 
-    // 관리자 페이지 이동 버튼 클릭 이벤트
     document.getElementById("adminBtn").addEventListener("click", () => {
         const token = localStorage.getItem("accessToken");
         if (!token) {

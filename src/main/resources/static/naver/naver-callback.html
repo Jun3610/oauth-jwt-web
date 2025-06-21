@@ -31,9 +31,7 @@
         credentials: "include"
     })
         .then(res => {
-            if (!res.ok) {
-                throw new Error("서버 응답 실패");
-            }
+            if (!res.ok) throw new Error("서버 응답 실패");
             return res.json();
         })
         .then(data => {
@@ -42,7 +40,7 @@
                 throw new Error(data.errorDescription || data.error);
             }
 
-            const { accessToken, refreshToken, username } = data;
+            const { accessToken, refreshToken, tokenType, expiresIn, userId, username } = data;
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
@@ -51,7 +49,12 @@
 
             const output = `
             <h3>로그인 성공!</h3>
-            <p><strong>User Name</strong>: ${username}</p>
+            <p><strong>Access Token:</strong> ${accessToken}</p>
+            <p><strong>Refresh Token:</strong> ${refreshToken}</p>
+            <p><strong>Token Type:</strong> ${tokenType}</p>
+            <p><strong>Expires In:</strong> ${expiresIn}ms</p>
+            <p><strong>User ID:</strong> ${userId}</p>
+            <p><strong>User Name:</strong> ${username}</p>
         `;
             document.getElementById("info").innerHTML = output;
 
