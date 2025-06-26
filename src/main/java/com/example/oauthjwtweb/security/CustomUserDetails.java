@@ -16,21 +16,20 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> {
-                    String roleName = role.getRoleName();
-                    System.out.println("권한 등록됨: " + roleName);
-                    return new SimpleGrantedAuthority("ROLE_" + roleName);
-                })
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> {
+                String roleName = role.getRoleName();
+                System.out.println("권한 등록됨: " + roleName);
+                return new SimpleGrantedAuthority("ROLE_" + roleName);
+        })
+
+        .collect(Collectors.toList());
 
         return authorities;
     }
 
-
     @Override
     public String getPassword() {
-        return "";
+        return null;
     }
 
     @Override

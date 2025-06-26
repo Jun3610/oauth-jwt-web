@@ -1,7 +1,7 @@
 package com.example.oauthjwtweb.service;
 
 import com.example.oauthjwtweb.entity.User;
-import com.example.oauthjwtweb.repository.UserRepository;
+import com.example.oauthjwtweb.repository.adminRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    private final UserRepository userRepository;
+    private final adminRepository userRepository;
 
-    public AdminService(UserRepository userRepository) {
+    public AdminService(adminRepository userRepository) {
         this.userRepository = userRepository;
     }
 

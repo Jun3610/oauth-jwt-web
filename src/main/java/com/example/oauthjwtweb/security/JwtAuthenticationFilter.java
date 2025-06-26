@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,46 +19,39 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    @Autowired
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
+    // Helper Method, Not overriding
+    private String extractToken(HttpServletRequest request) { //Extracting Token Value
+        String header = request.getHeader("Authorization"); //Return Value for Key Authorization
+        if (header != null && header.startsWith("Bearer ")) { //
+            return header.substring(7);
+        }
+        return null;
+    }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("JwtAuthenticationFilter 호출됨 - 요청 URL: " + request.getRequestURI());
-
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+                                    throws ServletException, IOException {
+        System.out.println("JwtAuthenticationFilter 호출 - 요청 URL: " + request.getRequestURI());
         String token = extractToken(request);
 
-        if (token != null && jwtService.isTokenValid(token)) {
-            Claims claims = jwtService.parseClaims(token);
-            String userId = claims.getSubject();
-
-            // UserDetailsService를 통해 UserDetails 객체를 로드
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
-
-            // 인증 객체 생성 (UserDetails + 권한 정보)
+        if (token != null && jwtService.isTokenValid(token)) {  // verifying Token
+            Claims claims = jwtService.parseClaims(token); // Extract UserID
+            String userId = claims.getSubject(); // Extract sub, Owner
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userId); // Change the Type to UserDetails by Service
             Authentication auth = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-
+                                userDetails, null, userDetails.getAuthorities()); //
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String extractToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7);
-        }
-        return null;
     }
 }
