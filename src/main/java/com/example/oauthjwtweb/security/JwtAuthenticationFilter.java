@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String userId = claims.getSubject(); // Extract sub, Owner
             UserDetails userDetails = userDetailsService.loadUserByUsername(userId); // Change the Type to UserDetails by Service
             Authentication auth = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities()); //
+                                    userDetails, null, userDetails.getAuthorities()); //
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 

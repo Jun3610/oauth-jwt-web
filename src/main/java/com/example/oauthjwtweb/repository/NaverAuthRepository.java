@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface NaverAuthRepository extends JpaRepository<User, String> {
+    public interface NaverAuthRepository extends JpaRepository<User, String> {
     Optional <User> findByOauthId (String OAuth_id);
 }

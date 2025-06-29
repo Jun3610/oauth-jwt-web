@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
+
     public CustomUserDetails(User user) {this.user = user;}
 
     @Override
@@ -27,14 +28,15 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
 
     @Override
     public String getUsername() {
         return user.getUserName();
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
     }
 
     @Override
